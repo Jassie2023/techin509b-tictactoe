@@ -4,19 +4,7 @@
 
 from logic import make_empty_board
 
-
 # Reminder to check all the tests
-
-if __name__ == '__main__':
-    board = make_empty_board()
-    winner = None
-    while winner == None:
-        print("TODO: take a turn!")
-        # TODO: Show the board to the user.
-        # TODO: Input a move from the player.
-        # TODO: Update the board.
-        # TODO: Update who's turn it is.
-        winner = 'X'  # FIXME
 
 def print_board(board):
     for row in board:
@@ -44,9 +32,17 @@ def check_win(board, player):
 def is_board_full(board):
     return all(cell != " " for row in board for cell in row)
 
-def main():
-    board = [[' ' for _ in range(3)] for _ in range(3)]
-    current_player = "X"
+if __name__ == '__main__':
+    board = make_empty_board()
+    winner = None
+    while winner == None:
+        print("TODO: take a turn!")
+        # TODO: Show the board to the user.
+        # TODO: Input a move from the player.
+        # TODO: Update the board.
+        # TODO: Update who's turn it is.
+        winner = 'X'  # FIXME
+        current_player = "X"
 
     while True:
         print_board(board)
@@ -70,6 +66,3 @@ def main():
             current_player = "O" if current_player == "X" else "X"
         else:
             print("That position is already taken. Try again.")
-
-if __name__ == "__main__":
-    main()
