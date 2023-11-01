@@ -56,9 +56,9 @@ if __name__ == '__main__':
 
             if all(cell is not None for row in board for cell in row):
                 print_board(board)
-                print("It's a tie!")
+                print("Success!")
                 break
 
             current_player = other_player(current_player)
         else:
-            print("That position is already taken. Try again.")
+            print("Position is taken, you should try it again.")
