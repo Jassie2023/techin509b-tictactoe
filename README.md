@@ -8,4 +8,5 @@
 
 3. Run the following command to execute the tests:
 
-#python tests.py
+```bash
+python tests.py
