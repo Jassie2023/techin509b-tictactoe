@@ -1,76 +1,26 @@
-import random
+import unittest
+from unittest.mock import patch
+from tictactoe import TicTacToeGame, HumanPlayer, BotPlayer, make_empty_board, move_step, get_winner, is_full
 
-def make_empty_board():
-    return [
-        [None, None, None],
-        [None, None, None],
-        [None, None, None],
-    ]
+class TestTicTacToe(unittest.TestCase):
+    def setUp(self):
+        self.human_player = HumanPlayer('X')
+        self.bot_player = BotPlayer('O')
 
-def print_board(board):
-    for row in board:
-        print(" ".join([str(cell) if cell is not None else ' ' for cell in row]))
+    def test_game_initialized_with_empty_board(self):
+        game = TicTacToeGame(player1=self.human_player, player2=self.bot_player)
+        self.assertEqual(game.board, make_empty_board())
 
-def move_step(board, row, col, player):
-    if board[row][col] is None:
-        board[row][col] = player
-        return True
-    else:
-        return False
+    def test_players_assigned_unique_symbols(self):
+        game = TicTacToeGame(player1=self.human_player, player2=self.bot_player)
+        self.assertNotEqual(game.players[0].symbol, game.players[1].symbol)
 
-def get_winner(board):
-    # Implement your logic to check for a winner
-    pass
+    def test_move_step(self):
+        board = make_empty_board()
+        self.assertTrue(move_step(board, 0, 0, 'X'))
+        self.assertFalse(move_step(board, 0, 0, 'O'))
 
-def is_full(board):
-    for row in board:
-        if None in row:
-            return False
-    return True
+    # Add more tests for other features
 
-class TicTacToeGame:
-    def __init__(self, player1, player2):
-        self.board = make_empty_board()
-        self.current_player = 'X'
-        self.player1 = player1
-        self.player2 = player2
-
-    def play_game(self):
-        while True:
-            print_board(self.board)
-            print(f"Player {self.current_player}'s turn")
-
-            try:
-                row, col = self.current_player.make_move(self.board)
-                if not (0 <= row <= 2 and 0 <= col <= 2):
-                    raise ValueError("Invalid input. Row and column must be 0, 1, or 2.")
-
-                if move_step(self.board, row, col, self.current_player):
-                    winner = get_winner(self.board)
-                    if winner:
-                        print_board(self.board)
-                        print(f"Player {winner} wins!")
-                        break
-                    elif is_full(self.board):
-                        print_board(self.board)
-                        print("It's a draw!")
-                        break
-                    self.current_player = 'X' if self.current_player == 'O' else 'O'
-                else:
-                    print("Position is taken, you should try it again.")
-            except ValueError as e:
-                print(str(e))
-
-class HumanPlayer:
-    def make_move(self, board):
-        while True:
-            try:
-                row = int(input("Enter row (0, 1, or 2): "))
-                col = int(input("Enter column (0, 1, or 2): "))
-                return row, col
-            except ValueError:
-                print("Invalid input. Please enter a number.")
-
-class BotPlayer:
-    def make_move(self, board):
-        return random.randint(0, 2), random.randint(0, 2)
+if __name__ == '__main__':
+    unittest.main()
