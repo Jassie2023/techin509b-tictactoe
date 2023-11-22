@@ -1,3 +1,5 @@
+import random
+
 def make_empty_board():
     return [
         [None, None, None],
@@ -5,6 +7,26 @@ def make_empty_board():
         [None, None, None],
     ]
 
+def print_board(board):
+    for row in board:
+        print(" ".join([str(cell) if cell is not None else ' ' for cell in row]))
+
+def move_step(board, row, col, player):
+    if board[row][col] is None:
+        board[row][col] = player
+        return True
+    else:
+        return False
+
+def get_winner(board):
+    # Implement your logic to check for a winner
+    pass
+
+def is_full(board):
+    for row in board:
+        if None in row:
+            return False
+    return True
 
 class TicTacToeGame:
     def __init__(self, player1, player2):
@@ -19,12 +41,8 @@ class TicTacToeGame:
             print(f"Player {self.current_player}'s turn")
 
             try:
-                if self.current_player == 'X':
-                    row, col = self.player1.make_move(self.board)
-                else:
-                    row, col = self.player2.make_move(self.board)
-
-                if row not in (0, 1, 2) or col not in (0, 1, 2):
+                row, col = self.current_player.make_move(self.board)
+                if not (0 <= row <= 2 and 0 <= col <= 2):
                     raise ValueError("Invalid input. Row and column must be 0, 1, or 2.")
 
                 if move_step(self.board, row, col, self.current_player):
@@ -43,9 +61,8 @@ class TicTacToeGame:
             except ValueError as e:
                 print(str(e))
 
-
 class HumanPlayer:
-    def make_move(board):
+    def make_move(self, board):
         while True:
             try:
                 row = int(input("Enter row (0, 1, or 2): "))
@@ -54,16 +71,6 @@ class HumanPlayer:
             except ValueError:
                 print("Invalid input. Please enter a number.")
 
-                
 class BotPlayer:
-    def make_move(board):
-        import random
+    def make_move(self, board):
         return random.randint(0, 2), random.randint(0, 2)
-
-
-if __name__ == '__main__':
-    human_player = HumanPlayer()
-    bot_player = BotPlayer()
-
-    game = TicTacToeGame(player1=human_player, player2=bot_player)
-    game.play_game()
