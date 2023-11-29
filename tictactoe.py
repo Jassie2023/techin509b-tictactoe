@@ -1,6 +1,6 @@
 import csv
 import os
-import datetime  # For recording the timestamp
+import datetime
 
 # Define the path for the log file
 LOG_FILE_PATH = 'logs/game_log.csv'
@@ -26,12 +26,6 @@ def record_game_data(player1, player2, winner, total_moves):
 
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         writer.writerow({'Player1': player1, 'Player2': player2, 'Winner': winner, 'TotalMoves': total_moves, 'Timestamp': timestamp})
-
-# Your existing game code remains unchanged
-
-# ...
-
-# In your TicTacToeGame class, where the game ends, call the record_winner and record_game_data functions:
 
 class TicTacToeGame:
     def __init__(self, player1, player2):
