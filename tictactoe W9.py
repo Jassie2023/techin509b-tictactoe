@@ -1,31 +1,33 @@
-import csv
-import os
-import datetime
 
-# Define the path for the log file
-LOG_FILE_PATH = 'logs/game_log.csv'
+class TicTacToeGame:
+    
+    def make_empty_board():
+    return [
+        [None, None, None],
+        [None, None, None],
+        [None, None, None],
+    ]
 
-def record_winner(winner):
-    with open(LOG_FILE_PATH, 'a', newline='') as csvfile:
-        fieldnames = ['Winner', 'Timestamp']
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+def print_board(board):
+    for row in board:
+        print(" ".join([str(cell) if cell is not None else ' ' for cell in row]))
 
-        if os.path.getsize(LOG_FILE_PATH) == 0:
-            writer.writeheader()
+def move_step(board, row, col, player):
+    if board[row][col] is None:
+        board[row][col] = player
+        return True
+    else:
+        return False
 
-        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        writer.writerow({'Winner': winner, 'Timestamp': timestamp})
+def get_winner(board):
+    # Implement logic to check for a winner
+    pass
 
-def record_game_data(player1, player2, winner, total_moves):
-    with open(LOG_FILE_PATH, 'a', newline='') as csvfile:
-        fieldnames = ['Player1', 'Player2', 'Winner', 'TotalMoves', 'Timestamp']
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-
-        if os.path.getsize(LOG_FILE_PATH) == 0:
-            writer.writeheader()
-
-        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        writer.writerow({'Player1': player1, 'Player2': player2, 'Winner': winner, 'TotalMoves': total_moves, 'Timestamp': timestamp})
+def is_full(board):
+    for row in board:
+        if None in row:
+            return False
+    return True
 
 class TicTacToeGame:
     def __init__(self, player1, player2):
@@ -35,7 +37,6 @@ class TicTacToeGame:
         self.player2 = player2
 
     def play_game(self):
-        total_moves = 0
         while True:
             print_board(self.board)
             print(f"Player {self.current_player}'s turn")
@@ -51,24 +52,40 @@ class TicTacToeGame:
 
                 if move_step(self.board, row, col, self.current_player):
                     winner = get_winner(self.board)
-                    total_moves += 1
-
                     if winner:
                         print_board(self.board)
                         print(f"Player {winner} wins!")
-                        record_winner(winner)
-                        record_game_data("HumanPlayer" if self.current_player == 'X' else "BotPlayer",
-                                         "BotPlayer" if self.current_player == 'X' else "HumanPlayer",
-                                         winner, total_moves)
                         break
                     elif is_full(self.board):
                         print_board(self.board)
                         print("It's a draw!")
-                        record_game_data("HumanPlayer", "BotPlayer", 'Draw', total_moves)
                         break
-
                     self.current_player = 'X' if self.current_player == 'O' else 'O'
                 else:
-                    print("Position is taken, try again.")
+                    print("Position is taken, you should try it again.")
             except ValueError as e:
                 print(str(e))
+
+class HumanPlayer:
+    def make_move(self, board):
+        while True:
+            try:
+                row = int(input("Enter row (0, 1, or 2): "))
+                col = int(input("Enter column (0, 1, or 2): "))
+                return row, col
+            except ValueError:
+                print("Invalid input. Please enter a number.")
+
+class BotPlayer:
+    def make_move(self, board):
+        import random
+        return random.randint(0, 2), random.randint(0, 2)
+
+
+    def record_winner(self, winner):
+        with open("game_log.csv", "a") as log_file:
+            log_file.write(f"{winner}\n")
+
+# 在 play_game 方法中，调用 record_winner 方法记录获胜者
+# 在  winner = get_winner(self.board) 之后添加
+self.record_winner(winner)
